@@ -1,4 +1,8 @@
 
+
+
+
+
                 var hue = 127;
                 var saturation = 127;
                 var luminance = 127;
@@ -132,3 +136,25 @@ function takePicture(){
         console.log(document.getElementById("email").value);
         form.style.display = 'none';
 }
+
+function hideControls(){
+    div = document.getElementById("sliders");
+    div.style.display = 'none';
+}
+
+function goFullScreen() {
+    var
+          el = document.documentElement
+        , rfs =
+               el.requestFullScreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+    ;
+    rfs.call(el);
+    fsbutton = document.getElementById("fullscreen_control");
+    fsbutton.style.display = 'none';
+
+}
+
+
+
