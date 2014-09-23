@@ -9,8 +9,8 @@
         };
 
         var reqAnimFrame = window.requestAnimationFrame
-                || window.mozRequestAnimationFrame
-                || window.webkitRequestAnimationFrame || function (callback) {
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame || function (callback) {
             setTimeout(callback, 1000 / 60);
         };
 
@@ -39,111 +39,107 @@
 
 <body>
 
-<h1>Green screen effect in HTML5</h1>
+    <h1>Green screen effect in HTML5</h1>
 
-<p>This demo shows how to access the user's webcam, draw it into a HTML5, making pixels matching a
-    target color transparent</p>
+    <p>This demo shows how to access the user's webcam, draw it into a HTML5, making pixels matching a
+        target color transparent</p>
 
-<p>Click on the left video to select which color should be made transparent on the canvas on the right hand side.
-Use the slider below to adjust target color threshold</p>
+        <p>Click on the left video to select which color should be made transparent on the canvas on the right hand side.
+            Use the slider below to adjust target color threshold</p>
 
-    <video width="640" height="480" autoplay="autoplay">
+            <video width="640" height="480" autoplay="autoplay">
 
-    </video>
+            </video>
 
-    <span id="selectedColor"></span>
+            <span id="selectedColor"></span>
 
-<canvas id="buffer" width="640" height="480" >
+            <canvas id="buffer" width="640" height="480" >
 
-</canvas>
-    <canvas id="pickerBuffer" width="640" height="480"  style="display: none">
+            </canvas>
+            <canvas id="pickerBuffer" width="640" height="480"  style="display: none">
 
-    </canvas>
-<div>
-    <input type="range" id="sensitivity" value="90" min="0" max="440">
-</div>
-
-
-<script>
-
-    window.addEventListener('load', function () {
-
-        var canvas = $("canvas");
-        var video = $("video");
-        var ctx = canvas.getContext("2d");
-
-        var targetRed = 24;
-        var targetGreen = 85;
-        var targetBlue = 183;
-
-        var slider = $("#sensitivity");
-
-        var gum = window.navigator.getUserMedia ||
-                        window.navigator.webkitGetUserMedia ||
-                        window.navigator.mozGetUserMedia;
-
-        if (gum) {
-            gum.call(window.navigator, { video:true, audio:false },
-                    gotUserMedia,
-                    userMediaFailed);
-        } else {
-            console.log('Web camera streaming not supported');
-            alert('Web camera streaming not supported by your browser. Try Chrome or Opera');
-        }
-
-        function gotUserMedia(stream) {
-            var url = window.URL || window.webkitURL;
-            video.src = window.mozGetUserMedia ? stream : url.createObjectURL(stream);
-            video.play();
-        }
-
-        function userMediaFailed(err) {
-            console.log("Could not getUserMedia: " + err)
-        }
-
-        video.addEventListener("click", function(evt) {
-            var x = (evt.x - video.offsetLeft);
-            var y = (evt.y - video.offsetTop);
-
-            var pCtx  = $("#pickerBuffer").getContext("2d");
-            pCtx.drawImage(video, 0, 0);
-            var pixel = pCtx.getImageData(parseInt(x), parseInt(y), 1, 1).data;
-            targetRed = pixel[0];
-            targetGreen = pixel[1];
-            targetBlue = pixel[2];
-
-            var backgroundColor = 'rgb(' + targetRed +',' +targetGreen +',' +targetBlue +')';
-            $('#selectedColor').style.backgroundColor = backgroundColor;
-            $('#selectedColor').title = backgroundColor;
-        });
+            </canvas>
+            <div>
+                <input type="range" id="sensitivity" value="90" min="0" max="440">
+            </div>
 
 
-        function frameLoop() {
+            <script>
 
-            ctx.drawImage(video, 0, 0);
-            var image = ctx.getImageData(0, 0, 640, 480);
-            var data = image.data;
+                window.addEventListener('load', function () {
 
-            var sensitivity = slider.value;
+                    var canvas = $("canvas");
+                    var video = $("video");
+                    var ctx = canvas.getContext("2d");
 
-            for(var i = 0; i < data.length; i+=4) {
+                    var targetRed = 24;
+                    var targetGreen = 85;
+                    var targetBlue = 183;
 
-                var red = data[i];
-                var green = data[i + 1];
-                var blue = data[i + 2];
+                    var slider = $("#sensitivity");
 
-                var diff = Math.sqrt(Math.pow(targetRed - red, 2)
-                                   + Math.pow(targetGreen - green, 2)
-                                   + Math.pow(targetBlue - blue, 2));
+                    var gum = window.navigator.getUserMedia ||
+                    window.navigator.webkitGetUserMedia ||
+                    window.navigator.mozGetUserMedia;
 
-                if (diff < sensitivity) {
-                    data[i + 3] = 0;
-                }
+                    if (gum) {
+                        gum.call(window.navigator, { video:true, audio:false },
+                                 gotUserMedia,
+                                 userMediaFailed);
+                    } else {
+                        console.log('Web camera streaming not supported');
+                        alert('Web camera streaming not supported by your browser. Try Chrome or Opera');
+                    }
 
-            }
+                    function gotUserMedia(stream) {
+                        var url = window.URL || window.webkitURL;
+                        video.src = window.mozGetUserMedia ? stream : url.createObjectURL(stream);
+                        video.play();
+                    }
 
-            ctx.putImageData(image, 0,0)
-            reqAnimFrame(frameLoop);
+                    function userMediaFailed(err) {
+                        console.log("Could not getUserMedia: " + err)
+                    }
+
+                    video.addEventListener("click", function(evt) {
+                        var x = (evt.x - video.offsetLeft);
+                        var y = (evt.y - video.offsetTop);
+
+                        var pCtx  = $("#pickerBuffer").getContext("2d");
+                        pCtx.drawImage(video, 0, 0);
+                        var pixel = pCtx.getImageData(parseInt(x), parseInt(y), 1, 1).data;
+                        targetRed = pixel[0];
+                        targetGreen = pixel[1];
+                        targetBlue = pixel[2];
+
+                        var backgroundColor = 'rgb(' + targetRed +',' +targetGreen +',' +targetBlue +')';
+                        $('#selectedColor').style.backgroundColor = backgroundColor;
+                        $('#selectedColor').title = backgroundColor;
+                    });
+
+
+                    function frameLoop() {
+
+                        ctx.drawImage(video, 0, 0);
+                        var image = ctx.getImageData(0, 0, 640, 480);
+                        var data = image.data;
+
+                        var sensitivity = slider.value;
+
+            //get HSL values from sliders --> calibrate
+            for (var i = 0, j = 0; j < len; i++, j += 4) {
+    // Convert from RGB to HSL...
+    var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
+    var h = hsl[0], s = hsl[1], l = hsl[2];
+
+    //get slider data
+    if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
+      data[j + 3] = 0;
+  }
+}
+
+ctx.putImageData(image, 0,0)
+reqAnimFrame(frameLoop);
             // Rendering bug in Chrome? Unless we do this
             // the source <video> is not displayed until clicked..
             video.style.display="inline-block";
@@ -151,6 +147,43 @@ Use the slider below to adjust target color threshold</p>
 
         reqAnimFrame(frameLoop);
     });
+
+function rgb2hsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+
+    var min = Math.min(r, g, b);
+    var max = Math.max(r, g, b);
+    var delta = max - min;
+    var h, s, l;
+
+    if (max == min) {
+      h = 0;
+  } else if (r == max) {
+      h = (g - b) / delta;
+  } else if (g == max) {
+      h = 2 + (b - r) / delta;
+  } else if (b == max) {
+      h = 4 + (r - g) / delta;
+  }
+
+  h = Math.min(h * 60, 360);
+
+  if (h < 0) {
+      h += 360;
+  }
+
+  l = (min + max) / 2;
+
+  if (max == min) {
+      s = 0;
+  } else if (l <= 0.5) {
+      s = delta / (max + min);
+  } else {
+      s = delta / (2 - max - min);
+  }
+
+  return [h, s * 100, l * 100];
+}
 </script>
 
 </body>
