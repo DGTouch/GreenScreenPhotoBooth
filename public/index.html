@@ -55,30 +55,20 @@
 </head>
 
 <body>
+    <video width="640" height="480" autoplay="autoplay"></video>
 
-    <h1>Green screen effect in HTML5</h1>
+    <div id="scene"></div>
 
-    <p>This demo shows how to access the user's webcam, draw it into a HTML5, making pixels matching a
-        target color transparent</p>
+    <canvas id="buffer" width="640" height="480" ></canvas>
 
-        <p>Click on the left video to select which color should be made transparent on the canvas on the right hand side.
-            Use the slider below to adjust target color threshold</p>
-
-            <video width="640" height="480" autoplay="autoplay"></video>
-
-            <span id="selectedColor"></span>
-            <div id="scene"></div>
-            <canvas id="buffer" width="640" height="480" ></canvas>
-            <canvas id="pickerBuffer" width="640" height="480"  style="display: none"></canvas>
-            <div class="sliders">
-                <p>Hue<input type="range" id="hue" value="90" min="0" max="255">
-                <p>Saturation<input type="range" id="saturation" value="90" min="0" max="255">
-                <p>Luminance<input type="range" id="luminance" value="90" min="0" max="255">
-                <p>Sensitivity<input type="range" id="sensitivity" value="90" min="0" max="255">
-            </div>
+    <div class="sliders">
+        <p>Hue<input type="range" id="hue" value="90" min="0" max="255">
+        <p>Saturation<input type="range" id="saturation" value="90" min="0" max="255">
+        <p>Luminance<input type="range" id="luminance" value="90" min="0" max="255">
+        <p>Sensitivity<input type="range" id="sensitivity" value="90" min="0" max="255">
+    </div>
 
     <script src="video.js"></script>
-
 </body>
 
 </html>
