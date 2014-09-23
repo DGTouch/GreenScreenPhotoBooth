@@ -10,6 +10,14 @@
                 var s_sens = 127;
                 var l_sens = 127;
 
+                var constraints = { video: {
+    mandatory: {
+      minWidth: 1280,
+      minHeight: 720
+    }
+  }
+};
+
                 window.addEventListener('load', function () {
 
                 var canvas = $("canvas");
@@ -21,7 +29,7 @@
                     window.navigator.mozGetUserMedia;
 
                     if (gum) {
-                        gum.call(window.navigator, { video:true, audio:false },
+                        gum.call(window.navigator, constraints,
                                  gotUserMedia,
                                  userMediaFailed);
                     } else {
@@ -43,7 +51,7 @@
                     function frameLoop() {
 
                         ctx.drawImage(video, 0, 0);
-                        var image = ctx.getImageData(0, 0, 640, 480);
+                        var image = ctx.getImageData(0, 0, 1280, 720);
                         var data = image.data;
                         var len = data.length;
 
