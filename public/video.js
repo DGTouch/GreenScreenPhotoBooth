@@ -82,7 +82,7 @@ ctx.putImageData(image, 0,0)
 reqAnimFrame(frameLoop);
 // Rendering bug in Chrome? Unless we do this
 // the source <video> is not displayed until clicked..
-video.style.display="inline-block";
+// video.style.display="inline-block";
 }
 
 reqAnimFrame(frameLoop);
