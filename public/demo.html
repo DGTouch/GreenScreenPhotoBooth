@@ -21,6 +21,17 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+        var $ = function (arg) {
+            return document.querySelector(arg);
+        };
+
+        var reqAnimFrame = window.requestAnimationFrame
+        || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame || function (callback) {
+            setTimeout(callback, 1000 / 60);
+        };
+    </script>
   </head>
 
   <body>
@@ -40,6 +51,8 @@
 
 
       <div class="jumbotron camera">
+    <video id="webcam" width="640" height="480" autoplay="autoplay"></video>      
+                  <canvas id="buffer" width="640" height="480" ></canvas>
         <p><a class="btn btn-lg btn-warning camera-button " href="http://getbootstrap.com/examples/jumbotron-narrow/#" role="button"><i class="glyphicon glyphicon-camera" style="font-size: 60px"></i></a></p>
       </div>
 
@@ -51,8 +64,11 @@
     </div> <!-- /container -->
 
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="./Narrow Jumbotron Template for Bootstrap_files/ie10-viewport-bug-workaround.js"></script>
-  
+
+      <div id="fullscreen_control">
+        <button onclick="goFullScreen()">Go Fullscreen</button>
+    </div>
+    <script src="video.js"></script>
+    <script >updateVideo(); </script>
 
 </body></html>

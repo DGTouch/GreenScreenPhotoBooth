@@ -16,6 +16,10 @@ body {
   height:467px;
 }
 
+#webcam {
+    display: none;
+}
+
 .camera-button{
 	margin-top: 300px;
 }
