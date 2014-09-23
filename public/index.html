@@ -60,7 +60,10 @@
 
             </canvas>
             <div>
-                <input type="range" id="sensitivity" value="90" min="0" max="440">
+                <p>Hue<input type="range" id="hue" value="90" min="0" max="255">
+                <p>Saturation<input type="range" id="saturation" value="90" min="0" max="255">
+                <p>Luminance<input type="range" id="luminance" value="90" min="0" max="255">
+                <p>Sensitivity<input type="range" id="sensitivity" value="90" min="0" max="255">
             </div>
 
 
@@ -76,7 +79,11 @@
                     var targetGreen = 85;
                     var targetBlue = 183;
 
-                    var slider = $("#sensitivity");
+                    var hue_slider = $("#hue");
+                    var sat_slider = $("#saturation");
+                    var lum_slider = $("#luminance");
+                    var sens_slider = $("#sensitivity");
+
 
                     var gum = window.navigator.getUserMedia ||
                     window.navigator.webkitGetUserMedia ||
@@ -124,30 +131,34 @@
                         var image = ctx.getImageData(0, 0, 640, 480);
                         var data = image.data;
 
-                        var sensitivity = slider.value;
-                         var len = data.length;
+                        var sensitivity = sens_slider.value;
+                        var hue = hue_slider.value;
+                        var saturation = sat_slider.value;
+                        var luminance = lum_slider.value;
 
-            //get HSL values from sliders --> calibrate
-            for (var i = 0, j = 0; j < len; i++, j += 4) {
-    // Convert from RGB to HSL...
-    var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
-    var h = hsl[0], s = hsl[1], l = hsl[2];
+                        var len = data.length;
 
-    //get slider data
-    if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
-      data[j + 3] = 0;
-  }
+//get HSL values from sliders --> calibrate
+for (var i = 0, j = 0; j < len; i++, j += 4) {
+// Convert from RGB to HSL...
+var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
+var h = hsl[0], s = hsl[1], l = hsl[2];
+
+//get slider data
+if (h >= (hue-sensitivity) && h <= (hue+sensitivity) && s >= (saturation-sensitivity) && s <= (saturation+sensitivity) && l >= (luminance-sensitivity) && l <= (luminance+sensitivity)) {
+    data[j + 3] = 0;
+}
 }
 
 ctx.putImageData(image, 0,0)
 reqAnimFrame(frameLoop);
-            // Rendering bug in Chrome? Unless we do this
-            // the source <video> is not displayed until clicked..
-            video.style.display="inline-block";
-        }
+// Rendering bug in Chrome? Unless we do this
+// the source <video> is not displayed until clicked..
+video.style.display="inline-block";
+}
 
-        reqAnimFrame(frameLoop);
-    });
+reqAnimFrame(frameLoop);
+});
 
 function rgb2hsl(r, g, b) {
     r /= 255; g /= 255; b /= 255;
@@ -158,32 +169,32 @@ function rgb2hsl(r, g, b) {
     var h, s, l;
 
     if (max == min) {
-      h = 0;
-  } else if (r == max) {
-      h = (g - b) / delta;
-  } else if (g == max) {
-      h = 2 + (b - r) / delta;
-  } else if (b == max) {
-      h = 4 + (r - g) / delta;
-  }
+        h = 0;
+    } else if (r == max) {
+        h = (g - b) / delta;
+    } else if (g == max) {
+        h = 2 + (b - r) / delta;
+    } else if (b == max) {
+        h = 4 + (r - g) / delta;
+    }
 
-  h = Math.min(h * 60, 360);
+    h = Math.min(h * 60, 360);
 
-  if (h < 0) {
-      h += 360;
-  }
+    if (h < 0) {
+        h += 360;
+    }
 
-  l = (min + max) / 2;
+    l = (min + max) / 2;
 
-  if (max == min) {
-      s = 0;
-  } else if (l <= 0.5) {
-      s = delta / (max + min);
-  } else {
-      s = delta / (2 - max - min);
-  }
+    if (max == min) {
+        s = 0;
+    } else if (l <= 0.5) {
+        s = delta / (max + min);
+    } else {
+        s = delta / (2 - max - min);
+    }
 
-  return [h, s * 100, l * 100];
+    return [h, s * 100, l * 100];
 }
 </script>
 
