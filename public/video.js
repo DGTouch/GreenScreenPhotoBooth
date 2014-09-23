@@ -4,30 +4,6 @@
                 var luminance = 127;
                 var sensitivity = 127;
 
-                var hueInput = document.getElementById("hue");
-                var satInput = document.getElementById("saturation");
-                var lumInput = document.getElementById("luminance");
-                var sensInput = document.getElementById("sensitivity");
-
-
-
-                hueInput.addEventListener('mouseup', function() {
-               hue = this.value;
-                });
-
-                satInput.addEventListener('mouseup', function() {
-               saturation = this.value;
-                });
-
-                lumInput.addEventListener('mouseup', function() {
-               luminance = this.value;
-                });
-
-                sensInput.addEventListener('mouseup', function() {
-               sensitivity = this.value;
-                });
-
-
                 window.addEventListener('load', function () {
 
                     var canvas = $("canvas");
@@ -73,7 +49,8 @@ var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
 var h = hsl[0], s = hsl[1], l = hsl[2];
 
 //get slider data
-if (h >= (hue-sensitivity) && h <= (hue+sensitivity) && s >= (saturation-sensitivity) && s <= (saturation+sensitivity) && l >= (luminance-sensitivity) && l <= (luminance+sensitivity)) {
+
+if (isBounded(h, hue, sensitivity) && isBounded(s, saturation, sensitivity) && isBounded(l, luminance, sensitivity)) {
     data[j + 3] = 0;
 }
 }
@@ -87,6 +64,12 @@ reqAnimFrame(frameLoop);
 
 reqAnimFrame(frameLoop);
 });
+
+
+function isBounded(a, b, max_delta) {
+    delta = Math.abs(a - b);
+    if (delta <= max_delta) return true;
+}
 
 function rgb2hsl(r, g, b) {
     r /= 255; g /= 255; b /= 255;
@@ -123,4 +106,18 @@ function rgb2hsl(r, g, b) {
     }
 
     return [h, s * 100, l * 100];
+}
+
+function updateVideo(){
+    hue = Number(document.getElementById("hue").value);
+    console.log('hue ' + hue);
+
+    saturation = Number(document.getElementById("saturation").value);
+    console.log('saturation ' + saturation);
+
+    luminance = Number(document.getElementById("luminance").value);
+    console.log('luminance ' + luminance);
+
+    sensitivity = Number(document.getElementById("sensitivity").value);
+    console.log('sensitivity ' + sensitivity);
 }
