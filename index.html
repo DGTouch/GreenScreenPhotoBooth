@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script>
+        var $ = function (arg) {
+            return document.querySelector(arg);
+        };
+
+        var reqAnimFrame = window.requestAnimationFrame
+                || window.mozRequestAnimationFrame
+                || window.webkitRequestAnimationFrame || function (callback) {
+            setTimeout(callback, 1000 / 60);
+        };
+
+    </script>
+
+    <style type="text/css">
+
+        body {
+            font-family: sans-serif;
+            color:white;
+        }
+        #selectedColor {
+            display: inline-block;
+            width:3em;
+            height: 480px;
+            border: 1px solid white;
+        }
+
+        #sensitivity {
+            width: 800px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Green screen effect in HTML5</h1>
+
+<p>This demo shows how to access the user's webcam, draw it into a HTML5, making pixels matching a
+    target color transparent</p>
+
+<p>Click on the left video to select which color should be made transparent on the canvas on the right hand side.
+Use the slider below to adjust target color threshold</p>
+
+    <video width="640" height="480" autoplay="autoplay">
+
+    </video>
+
+    <span id="selectedColor"></span>
+
+<canvas id="buffer" width="640" height="480" >
+
+</canvas>
+    <canvas id="pickerBuffer" width="640" height="480"  style="display: none">
+
+    </canvas>
+<div>
+    <input type="range" id="sensitivity" value="90" min="0" max="440">
+</div>
+
+
+<script>
+
+    window.addEventListener('load', function () {
+
+        var canvas = $("canvas");
+        var video = $("video");
+        var ctx = canvas.getContext("2d");
+
+        var targetRed = 24;
+        var targetGreen = 85;
+        var targetBlue = 183;
+
+        var slider = $("#sensitivity");
+
+        var gum = window.navigator.getUserMedia ||
+                        window.navigator.webkitGetUserMedia ||
+                        window.navigator.mozGetUserMedia;
+
+        if (gum) {
+            gum.call(window.navigator, { video:true, audio:false },
+                    gotUserMedia,
+                    userMediaFailed);
+        } else {
+            console.log('Web camera streaming not supported');
+            alert('Web camera streaming not supported by your browser. Try Chrome or Opera');
+        }
+
+        function gotUserMedia(stream) {
+            var url = window.URL || window.webkitURL;
+            video.src = window.mozGetUserMedia ? stream : url.createObjectURL(stream);
+            video.play();
+        }
+
+        function userMediaFailed(err) {
+            console.log("Could not getUserMedia: " + err)
+        }
+
+        video.addEventListener("click", function(evt) {
+            var x = (evt.x - video.offsetLeft);
+            var y = (evt.y - video.offsetTop);
+
+            var pCtx  = $("#pickerBuffer").getContext("2d");
+            pCtx.drawImage(video, 0, 0);
+            var pixel = pCtx.getImageData(parseInt(x), parseInt(y), 1, 1).data;
+            targetRed = pixel[0];
+            targetGreen = pixel[1];
+            targetBlue = pixel[2];
+
+            var backgroundColor = 'rgb(' + targetRed +',' +targetGreen +',' +targetBlue +')';
+            $('#selectedColor').style.backgroundColor = backgroundColor;
+            $('#selectedColor').title = backgroundColor;
+        });
+
+
+        function frameLoop() {
+
+            ctx.drawImage(video, 0, 0);
+            var image = ctx.getImageData(0, 0, 640, 480);
+            var data = image.data;
+
+            var sensitivity = slider.value;
+
+            for(var i = 0; i < data.length; i+=4) {
+
+                var red = data[i];
+                var green = data[i + 1];
+                var blue = data[i + 2];
+
+                var diff = Math.sqrt(Math.pow(targetRed - red, 2)
+                                   + Math.pow(targetGreen - green, 2)
+                                   + Math.pow(targetBlue - blue, 2));
+
+                if (diff < sensitivity) {
+                    data[i + 3] = 0;
+                }
+
+            }
+
+            ctx.putImageData(image, 0,0)
+            reqAnimFrame(frameLoop);
+            // Rendering bug in Chrome? Unless we do this
+            // the source <video> is not displayed until clicked..
+            video.style.display="inline-block";
+        }
+
+        reqAnimFrame(frameLoop);
+    });
+</script>
+
+</body>
+
+</html>
