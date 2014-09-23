@@ -20,7 +20,7 @@
 
         body {
             font-family: sans-serif;
-            color:white;
+            color:black;
         }
 
         #webcam {
@@ -78,14 +78,15 @@
             <canvas id="buffer" width="640" height="480" ></canvas>
         </div>    
     </div>
-    
 
+    <div class="photo">
+        <button onclick="takePicture()">TAKE PICTURE!</button>
+    </div>
 
     <div class="sliders">
-        Hue<input type="text" maxLength="3" id="hue" value="90" min="0" max="255"/><br>
-        Saturation<input type="text" maxLength="3" id="saturation" value="90" min="0" max="255"/><br>
-        Luminance<input type="text" maxLength="3" id="luminance" value="90" min="0" max="255"/><br>
-        Sensitivity<input type="text" maxLength="3" id="sensitivity" value="90" min="0" max="255"/><br>
+        H<input type="text" maxLength="3" id="hue" value="115"/><input type="text" maxLength="3" id="h_sens" value="90"/><br>
+        S<input type="text" maxLength="3" id="saturation" value="90"/><input type="text" maxLength="3" id="s_sens" value="90"/><br>
+        L<input type="text" maxLength="3" id="luminance" value="90"/><input type="text" maxLength="3" id="l_sens" value="90"/><br>
         <button onclick="updateVideo()">Update</button>
 
     </div>

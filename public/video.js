@@ -2,14 +2,17 @@
                 var hue = 127;
                 var saturation = 127;
                 var luminance = 127;
-                var sensitivity = 127;
+                var h_sens = 127;
+                var s_sens = 127;
+                var l_sens = 127;
+
+               
 
                 window.addEventListener('load', function () {
 
-                    var canvas = $("canvas");
-                    var video = $("#webcam");
-                    var ctx = canvas.getContext("2d");
-
+                     var canvas = $("canvas");
+                var video = $("#webcam");
+                var ctx = canvas.getContext("2d");
 
                     var gum = window.navigator.getUserMedia ||
                     window.navigator.webkitGetUserMedia ||
@@ -50,7 +53,7 @@ var h = hsl[0], s = hsl[1], l = hsl[2];
 
 //get slider data
 
-if (isBounded(h, hue, sensitivity) && isBounded(s, saturation, sensitivity) && isBounded(l, luminance, sensitivity)) {
+if (isBounded(h, hue, h_sens) && isBounded(s, saturation, s_sens) && isBounded(l, luminance, l_sens)) {
     data[j + 3] = 0;
 }
 }
@@ -110,14 +113,25 @@ function rgb2hsl(r, g, b) {
 
 function updateVideo(){
     hue = Number(document.getElementById("hue").value);
+    h_sens = Number(document.getElementById("h_sens").value);
     console.log('hue ' + hue);
 
     saturation = Number(document.getElementById("saturation").value);
+    s_sens = Number(document.getElementById("s_sens").value);
     console.log('saturation ' + saturation);
 
     luminance = Number(document.getElementById("luminance").value);
+    l_sens = Number(document.getElementById("l_sens").value);
+
     console.log('luminance ' + luminance);
 
     sensitivity = Number(document.getElementById("sensitivity").value);
     console.log('sensitivity ' + sensitivity);
+}
+
+function takePicture(){
+        var imgURL;
+        var canvas = $("canvas");
+        var dt = canvas.toDataURL('image/png');
+    console.log(dt);
 }
