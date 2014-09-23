@@ -7,7 +7,7 @@
                 window.addEventListener('load', function () {
 
                     var canvas = $("canvas");
-                    var video = $("video");
+                    var video = $("#webcam");
                     var ctx = canvas.getContext("2d");
 
 

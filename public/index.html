@@ -23,7 +23,7 @@
             color:white;
         }
 
-        video {
+        #webcam {
             display: none;
         }
 
@@ -42,6 +42,9 @@
             display: block;
             float:right;
             overflow: hidden;
+            position: absolute;
+            right: 10px;
+            top: 10px;
             width: 300px;
         }
 
@@ -52,9 +55,10 @@
 
         #scene {
             display: bock;
+            position: relative;
             width: 1024px;
             height: 660px;
-            background: url("background_02.jpg") #ABABAB no-repeat top left;
+            /*background: url("background_02.jpg") #ABABAB no-repeat top left;*/
             background-size: 100%;
         }
 
@@ -63,10 +67,14 @@
 </head>
 
 <body>
-    <video width="640" height="480" autoplay="autoplay"></video>
+    <video id="webcam" width="640" height="480" autoplay="autoplay"></video>
 
     <div id="scene">
-    <div id="capture">
+        <video autoplay style="width: 100%; height: auto; z-index: -1">
+            <source src="staff_dance.mp4" type="video/mp4">
+        </video>
+
+        <div id="capture">
             <canvas id="buffer" width="640" height="480" ></canvas>
         </div>    
     </div>
