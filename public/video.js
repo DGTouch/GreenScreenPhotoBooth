@@ -6,11 +6,9 @@
                 var s_sens = 127;
                 var l_sens = 127;
 
-               
-
                 window.addEventListener('load', function () {
 
-                     var canvas = $("canvas");
+                var canvas = $("canvas");
                 var video = $("#webcam");
                 var ctx = canvas.getContext("2d");
 
@@ -114,24 +112,23 @@ function rgb2hsl(r, g, b) {
 function updateVideo(){
     hue = Number(document.getElementById("hue").value);
     h_sens = Number(document.getElementById("h_sens").value);
-    console.log('hue ' + hue);
 
     saturation = Number(document.getElementById("saturation").value);
     s_sens = Number(document.getElementById("s_sens").value);
-    console.log('saturation ' + saturation);
 
     luminance = Number(document.getElementById("luminance").value);
     l_sens = Number(document.getElementById("l_sens").value);
 
-    console.log('luminance ' + luminance);
 
-    sensitivity = Number(document.getElementById("sensitivity").value);
-    console.log('sensitivity ' + sensitivity);
 }
 
 function takePicture(){
-        var imgURL;
         var canvas = $("canvas");
         var dt = canvas.toDataURL('image/png');
-    console.log(dt);
+        form=document.getElementById("photoForm");
+        console.log(dt);
+        console.log(document.getElementById("firstname").value);
+        console.log(document.getElementById("lastname").value);
+        console.log(document.getElementById("email").value);
+        form.style.display = 'none';
 }

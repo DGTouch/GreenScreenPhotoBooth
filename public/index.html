@@ -69,6 +69,14 @@
 <body>
     <video id="webcam" width="640" height="480" autoplay="autoplay"></video>
 
+<div id="photoForm">
+<!-- Details Form -->
+<input id="firstname" name="firstname" placeholder="firstname" type="text"/>
+<input id="lastname" name="lastname" placeholder="lastname" type="text"/>
+<input id="email" name="email" placeholder="Email" type="text"/>
+<button onclick="takePicture()">TAKE PICTURE!</button>
+</div>
+
     <div id="scene">
         <video autoplay style="width: 100%; height: auto; z-index: -1">
             <source src="staff_dance.mp4" type="video/mp4">
@@ -76,11 +84,7 @@
 
         <div id="capture">
             <canvas id="buffer" width="640" height="480" ></canvas>
-        </div>    
-    </div>
-
-    <div class="photo">
-        <button onclick="takePicture()">TAKE PICTURE!</button>
+        </div>
     </div>
 
     <div class="sliders">
@@ -88,9 +92,7 @@
         S<input type="text" maxLength="3" id="saturation" value="90"/><input type="text" maxLength="3" id="s_sens" value="90"/><br>
         L<input type="text" maxLength="3" id="luminance" value="90"/><input type="text" maxLength="3" id="l_sens" value="90"/><br>
         <button onclick="updateVideo()">Update</button>
-
     </div>
-
     <script src="video.js"></script>
 </body>
 
