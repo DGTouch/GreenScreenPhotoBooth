@@ -69,20 +69,40 @@
 
             <script>
 
+                var hue = 127;
+                var saturation = 127;
+                var luminance = 127;
+                var sensitivity = 127;
+
+                var hueInput = document.getElementById("hue");
+                var satInput = document.getElementById("saturation");
+                var lumInput = document.getElementById("luminance");
+                var sensInput = document.getElementById("sensitivity");
+
+
+
+                hueInput.addEventListener('mouseup', function() {
+               hue = this.value;
+                });
+
+                satInput.addEventListener('mouseup', function() {
+               sat = this.value;
+                });
+
+                lumInput.addEventListener('mouseup', function() {
+               luminance = this.value;
+                });
+
+                sensInput.addEventListener('mouseup', function() {
+               sensitivity = this.value;
+                });
+
+
                 window.addEventListener('load', function () {
 
                     var canvas = $("canvas");
                     var video = $("video");
                     var ctx = canvas.getContext("2d");
-
-                    var targetRed = 24;
-                    var targetGreen = 85;
-                    var targetBlue = 183;
-
-                    var hue_slider = $("#hue");
-                    var sat_slider = $("#saturation");
-                    var lum_slider = $("#luminance");
-                    var sens_slider = $("#sensitivity");
 
 
                     var gum = window.navigator.getUserMedia ||
@@ -108,34 +128,12 @@
                         console.log("Could not getUserMedia: " + err)
                     }
 
-                    video.addEventListener("click", function(evt) {
-                        var x = (evt.x - video.offsetLeft);
-                        var y = (evt.y - video.offsetTop);
-
-                        var pCtx  = $("#pickerBuffer").getContext("2d");
-                        pCtx.drawImage(video, 0, 0);
-                        var pixel = pCtx.getImageData(parseInt(x), parseInt(y), 1, 1).data;
-                        targetRed = pixel[0];
-                        targetGreen = pixel[1];
-                        targetBlue = pixel[2];
-
-                        var backgroundColor = 'rgb(' + targetRed +',' +targetGreen +',' +targetBlue +')';
-                        $('#selectedColor').style.backgroundColor = backgroundColor;
-                        $('#selectedColor').title = backgroundColor;
-                    });
-
 
                     function frameLoop() {
 
                         ctx.drawImage(video, 0, 0);
                         var image = ctx.getImageData(0, 0, 640, 480);
                         var data = image.data;
-
-                        var sensitivity = sens_slider.value;
-                        var hue = hue_slider.value;
-                        var saturation = sat_slider.value;
-                        var luminance = lum_slider.value;
-
                         var len = data.length;
 
 //get HSL values from sliders --> calibrate
