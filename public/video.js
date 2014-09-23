@@ -16,7 +16,7 @@
                 });
 
                 satInput.addEventListener('mouseup', function() {
-               sat = this.value;
+               saturation = this.value;
                 });
 
                 lumInput.addEventListener('mouseup', function() {
